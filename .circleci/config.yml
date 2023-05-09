@@ -24,6 +24,29 @@ jobs:
           command: docker build -t capstone . &&\ 
           docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest &&\
           docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
+      - run:
+          name: Install Minikube
+          command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
+      - run:
+          name: start Minikube
+          command: minikube start && kubectl get po -A
+      - run: 
+          name: DeployDocker
+          command: kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0 && kubectl expose deployment hello-minikube --type=NodePort --port=8000
+      - run:
+          name: GetKube
+          command: kubectl get services hello-minikube && kubectl port-forward service/hello-minikube 80:8000
+          
+    CheckConnection: 
+      docker:  
+        - image: circleci/python:3.6.7-stretch
+      steps:
+        - checkout
+        - run:
+            name: Check connection
+            command: curl -X POST http://localhost:3000/voice
+      
+
 
 workflows:
   WFlow: 
@@ -31,3 +54,5 @@ workflows:
       - build-and-test 
       - DeployDocker:
           requires: [build-and-test]
+      - CheckConnection:
+          requires: [DeployDocker]
