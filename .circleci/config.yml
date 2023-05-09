@@ -13,19 +13,8 @@ jobs:
       - run:
           name: Make
           command: make all
-          
-  DeployDocker:
-    docker:
-      - image: cimg/python:3.11.3
-    steps:
-      - checkout
-      - run:
-          name: Build Docker
-          command: echo "Hi"
 
 workflows:
   WFlow: 
     jobs:
       - build-and-test 
-      - DeployDocker:
-          requires: [build-and-test]
