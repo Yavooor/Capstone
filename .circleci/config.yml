@@ -20,8 +20,11 @@ jobs:
     steps:
       - checkout
       - run:
+          name: start docker
+          command: sudo systemctl start docker
+      - run:
           name: Build Docker
-          command: docker --version && docker build -t capstone . 
+          command: docker build -t capstone . 
       - run:
           name: Tag and Push Docker
           command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest && docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
