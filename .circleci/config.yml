@@ -27,10 +27,7 @@ jobs:
       - run:
           name: Build Docker
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            echo "* hard nofile 1048576" | sudo tee -a /etc/security/limits.conf
-            echo "* soft nofile 1048576" | sudo tee -a /etc/security/limits.conf
+            service docker status
             sudo service docker start
             service docker status
             docker build -t capstone . 
