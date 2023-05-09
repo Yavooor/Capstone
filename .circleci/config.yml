@@ -14,8 +14,20 @@ jobs:
           name: Make
           command: make all
           
+  DeployDocker:
+    docker: 
+      - image: cimg/python:3.11.3
+    steps:
+      - checkout
+      - run:
+          name: Build Docker
+          command: docker build -t capstone . &&\ 
+          docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest &&\
+          docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
 
 workflows:
   WFlow: 
     jobs:
       - build-and-test 
+      - DeployDocker:
+          requires: [build-and-test]
