@@ -21,7 +21,7 @@ jobs:
           
   DeployDocker:
     docker:  
-      - image: cimg/python:3.11.3
+      - image: circleci/docker-gc
     steps:
       - checkout
       - run:
