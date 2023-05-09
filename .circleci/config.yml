@@ -27,6 +27,7 @@ jobs:
       - run:
           name: Build Docker
           command: |
+            apt-get update && apt-get install -y sudo
             sudo dockerd --data-root /var/lib/docker --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 
             echo "ok"
             sleep 30
