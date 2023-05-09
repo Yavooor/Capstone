@@ -12,7 +12,12 @@ jobs:
           pkg-manager: pip
       - run:
           name: Make
-          command: make all
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate && make install
+      - run:
+          name: Lint with pylint and hadolint
+          command: . venv/bin/activate && make lint
           
   DeployDocker:
     docker:  
@@ -20,14 +25,14 @@ jobs:
     steps:
       - checkout
       - run:
-          name: start docker
-          command: sudo dockerd
-      - run:
           name: Build Docker
           command: docker build -t capstone . 
       - run:
-          name: Tag and Push Docker
-          command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest && docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
+          name: Tag Docker
+          command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
+      - run:
+          name: Push Docker
+          command: docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
       - run:
           name: Install Minikube
           command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -48,7 +53,7 @@ jobs:
       - checkout
       - run:
           name: Check connection
-          command: curl -X GET http://localhost:8000/
+          command: curl localhost:8000
       
 workflows:
   WFlow: 

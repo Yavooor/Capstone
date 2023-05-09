@@ -1,0 +1,64 @@
+version: 2.1
+
+jobs:
+  build:
+    working_directory: ~/app
+    docker:
+      - image: circleci/python:3.9.6
+
+    environment:
+      DOCKERHUB_CREDENTIALS: dockerhubCredentials
+
+    steps:
+      - checkout
+
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate && make install
+
+      - run:
+          name: Lint with pylint and hadolint
+          command: . venv/bin/activate && make lint
+
+      - run:
+          name: Build docker
+          command: |
+            docker build -t ybrahinmartinez/project-final-udacity .
+
+      - run:
+          name: Scan image with Aqua
+          command: |
+            curl -s https://raw.githubusercontent.com/aquasecurity/microscanner/v0.11.0/microscanner > microscanner \
+            && chmod +x microscanner \
+            && ./microscanner \
+              --html \
+              --not-complies-exit-code 4 \
+              --on-disallowed=ignore \
+              ybrahinmartinez/project-final-udacity
+
+      - run:
+          name: Publish docker to Dockerhub
+          command: |
+            echo $DOCKERHUB_CREDENTIALS | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            docker push ybrahinmartinez/project-final-udacity:latest
+
+      - run:
+          name: Deploy to Kubernetes (EKS Cluster)
+          command: |
+            aws eks --region us-west-2 update-kubeconfig --name UdacityFinalProject-EKS-CLUSTER
+            kubectl apply -f kubernetes/aws-auth-cm.yaml
+            kubectl set image deployments/capstone capstone=ybrahinmartinez/project-final-udacity:latest
+            sed -i "s/latest/$CIRCLE_SHA1/g" kubernetes/deployment.yml
+            kubectl apply -f kubernetes/deployment.yml
+            echo "Showing the result of deployment"
+            kubectl get svc
+            kubectl get pods -o wide
+            export SERVICE_ADDRESS=$(kubectl get svc --output=json | jq -r '.items[0] | .status.loadBalancer.ingress[0].hostname')
+            echo "Deployment Complete!"
+            echo "View Page Here (Please Allow a Minute for Services to Refresh): http://$SERVICE_ADDRESS:8000"
+
+      - run:
+          name: Cleaning up
+          command: docker system prune -f
