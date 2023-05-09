@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import time
-from flask import Flask
+from flask import Flasko
 app = Flask(__name__)
 
 START = time.time()
