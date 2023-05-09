@@ -16,7 +16,7 @@ jobs:
           
   DeployDocker:
     docker: 
-      - image: cimg/python:3.11.3
+      - image: circleci/python:3.6.7-stretch
     steps:
       - checkout
       - run:
