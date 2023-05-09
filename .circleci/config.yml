@@ -29,7 +29,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            sudo service docker start
+            sudo -E service docker start
             service docker status
             docker build -t capstone . 
       - run:
