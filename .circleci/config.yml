@@ -8,6 +8,8 @@ jobs:
       - image: cimg/python:3.10.2
     steps:
       - checkout
+      - python/install-packages:
+          pkg-manager: pip
       - run:
           name: Make
           command: make all
