@@ -21,7 +21,7 @@ jobs:
       - checkout
       - run:
           name: start docker
-          command: sudo systemctl start docker
+          command: sudo dockerd
       - run:
           name: Build Docker
           command: docker build -t capstone . 
