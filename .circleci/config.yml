@@ -26,7 +26,9 @@ jobs:
       - checkout
       - run:
           name: Build Docker
-          command: docker build -t capstone . 
+          command: |
+            . venv/bin/activate
+            docker build -t capstone . 
       - run:
           name: Tag Docker
           command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
