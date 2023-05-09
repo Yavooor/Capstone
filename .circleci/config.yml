@@ -35,14 +35,14 @@ jobs:
           name: GetKube
           command: kubectl get services hello-minikube && kubectl port-forward service/hello-minikube 80:8000
           
-    CheckConnection: 
-      docker:  
-        - image: circleci/python:3.6.7-stretch
-      steps:
-        - checkout
-        - run:
-            name: Check connection
-            command: curl -X GET http://localhost:8000/
+  CheckConnection: 
+    docker:  
+      - image: circleci/python:3.6.7-stretch
+    steps:
+      - checkout
+      - run:
+          name: Check connection
+          command: curl -X GET http://localhost:8000/
       
 workflows:
   WFlow: 
