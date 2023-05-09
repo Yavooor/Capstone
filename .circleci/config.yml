@@ -44,10 +44,8 @@ jobs:
         - checkout
         - run:
             name: Check connection
-            command: curl -X POST http://localhost:3000/voice
+            command: curl -X GET http://localhost:8000/
       
-
-
 workflows:
   WFlow: 
     jobs:
