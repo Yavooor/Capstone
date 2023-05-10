@@ -38,13 +38,13 @@ jobs:
       parameters:
         cluster-name:
           description: |
-            Name of the EKS cluster
+            capstone
           type: string
       steps:
         - kubernetes/install:
             kubectl-version: v1.22.0
         - aws-eks/update-kubeconfig-with-authenticator:
-            cluster-name: << parameters.cluster-name >>
+            cluster-name: capstone
         - run:
             command: |
               kubectl get services
