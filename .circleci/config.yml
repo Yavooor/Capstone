@@ -29,9 +29,13 @@ jobs:
       - run:
           name: Build Tag and Push Docker
           command: chmod 755 run_docker.sh && ./run_docker.sh
+          
   CreateEKSCluster:
     docker:  
       - image: cimg/python:3.11.3
+    environment:
+      AWS_ACCESS_KEY_ID: YOUR_ACCESS_KEY_ID
+      AWS_SECRET_ACCESS_KEY: YOUR_SECRET_ACCESS_KEY
     steps:
       - checkout
       - run: 
