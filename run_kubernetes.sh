@@ -6,7 +6,7 @@ dockerpath=yavormihalski/capstone:latest
 # Run the Docker Hub container with kubernetes
 kubectl run capstone\
     --image=$dockerpath\
-    --port=8000 --labels app=capstone-project
+    --port=8080 --labels app=capstone-project
 
 # Wait to pod status will be ready
 kubectl wait pod/capstone --for=condition=Ready --timeout=-1s
@@ -17,7 +17,7 @@ kubectl get pods
 
 # Step 4:
 # Forward the container port to a host
-kubectl port-forward capstone 8000:8000
+kubectl port-forward capstone 8080:8080
 
 # Step 5:
 # See the output of app running into pods

@@ -53,7 +53,7 @@ jobs:
       - checkout
       - run:
           name: Check connection
-          command: curl localhost:8000
+          command: curl localhost:8080
           
   Cleanup: 
     docker:  
