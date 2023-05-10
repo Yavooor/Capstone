@@ -73,16 +73,8 @@ workflows:
       - build-and-test 
       - DeployDocker:
           requires: [build-and-test]
-      - aws-eks/create-cluster:
-          cluster-name: capstone
-      - test-cluster:
-          cluster-name: capstone
-          requires:
-            - aws-eks/create-cluster
-      - aws-eks/delete-cluster:
-          cluster-name: my-eks-demo
-          requires:
-            - test-cluster
+      - CreateEKSCluster:
+          requires: [DeployDocker]
       - Kubes:
           requires: [CreateEKSCluster]
       - CheckConnection:
