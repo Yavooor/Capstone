@@ -29,15 +29,18 @@ jobs:
       - run:
           name: Build Tag and Push Docker
           command: chmod 755 run_docker.sh && ./run_docker.sh
+  CreateEKSCluster:
+    docker:  
+      - image: cimg/python:3.11.3
+    steps:
+      - checkout
       - run: 
           name: install eksctl
           command: sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && sudo mv /tmp/eksctl /usr/local/bin
-          
-  CreateEKSCluster:
-    docker:  
-      - image: amazon/aws-cli
-    steps:
-      - checkout
+      - run:
+          name: install awscli
+          command: |
+            pip install awscli
       - run:
           name: Create EKS Cluster
           command: |
