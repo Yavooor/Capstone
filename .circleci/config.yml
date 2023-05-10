@@ -19,23 +19,24 @@ jobs:
           name: Lint with pylint and hadolint
           command: . venv/bin/activate && make lint
           
+  push-docker:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: capstone
+          tag: "latest"
+      - docker/push:
+          image: capstone
+          tag: "latest"          
+          
   DeployDocker:
     docker:  
       - image: cimg/base:2022.06
     steps:
       - checkout
-      - setup_remote_docker:
-          version: 20.10.14
-      - run:
-          name: Build Docker
-          command: |
-            docker build --tag=capstone .
-      - run:
-          name: Tag Docker
-          command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
-      - run:
-          name: Push Docker
-          command: aws ecr get-login --no-include-email --region us-east-1 && docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
       - run:
           name: Install Minikube
           command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -62,6 +63,8 @@ workflows:
   WFlow: 
     jobs:
       - build-and-test 
+      - push-docker:
+          requires: [build-and-test]
       - DeployDocker:
           requires: [build-and-test]
       - CheckConnection:
