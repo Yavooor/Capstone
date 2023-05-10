@@ -33,6 +33,10 @@ jobs:
   CreateEKSCluster:
     docker:  
       - image: cimg/python:3.11.3
+    environment:
+      AWS_ACCESS_KEY_ID: EKSUser
+      AWS_SECRET_ACCESS_KEY: _ptDX1=i
+      AWS_DEFAULT_REGION: us-east-1
     steps:
       - checkout
       - run: 
@@ -45,8 +49,8 @@ jobs:
       - run:
           name: Create EKS Cluster
           command: |
-            aws configure && \
             eksctl create cluster --name capstone --region=us-east-1 && \
+            eksctl create cluster -f cluster-config.yaml --profile fsnd
             eksctl utils describe-stacks --region=us-east-1 --cluster=capstone && \
             eksctl get cluster --name=capstone --region=us-east-1
           
