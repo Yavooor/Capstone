@@ -35,7 +35,7 @@ jobs:
           command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
       - run:
           name: Push Docker
-          command: docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
+          command: docker login -u YavorMihalski -p Lolo12345 && docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
       - run:
           name: Install Minikube
           command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
