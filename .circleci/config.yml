@@ -28,10 +28,7 @@ jobs:
           version: 20.10.14
       - run:
           name: Build Tag and Push Docker
-          command: |
-            docker build --tag=capstone . && \
-            docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest && \
-            docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
+          command: ./run_docker.sh
       - run:
           name: Install Minikube
           command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
