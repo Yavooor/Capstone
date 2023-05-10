@@ -66,7 +66,9 @@ jobs:
         - run:
             command: |
               kubectl get services
-            name: Test cluster
+            name: get clusters
+            
+            
             
   CheckConnection: 
     docker:  
@@ -97,7 +99,7 @@ workflows:
       - test-cluster:
           cluster-name: capstone
           requires:
-            - aws-eks/create-cluster
+            - Kubes
       - aws-eks/delete-cluster:
           cluster-name: my-eks-demo
           requires:
