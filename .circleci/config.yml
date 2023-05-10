@@ -69,4 +69,4 @@ workflows:
       - Kubes:
           requires: [DeployDocker]
       - CheckConnection:
-          requires: [DeployDocker]
+          requires: [Kubes]
