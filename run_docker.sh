@@ -9,5 +9,6 @@ docker login -u AWS -p eyJwYXlsb2FkIjoiOHpRcU9OTzNuWG8xSUdaSTNFNVlQdVBNMEpQNWtTa
 
 docker push 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
 
+docker login -u yavormihalski -p Lolo12345
 docker tag capstone yavormihalski/capstone:latest
 docker push yavormihalski/capstone:latest

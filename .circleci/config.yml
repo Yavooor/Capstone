@@ -36,20 +36,8 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Minikube
-          command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
-      - run:
-          name: start Minikube
-          command: minikube start && kubectl get po -A
-      - run:
-          name: get kubes
-          command: kubectl get po -A
-      - run: 
-          name: DeployDocker
-          command: kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0 && kubectl expose deployment hello-minikube --type=NodePort --port=8000
-      - run:
-          name: GetKube
-          command: kubectl get services hello-minikube && kubectl port-forward service/hello-minikube 80:8000
+          name: run kubernetes
+          command: ./run_kubernetes.sh
           
   CheckConnection: 
     docker:  
@@ -59,6 +47,15 @@ jobs:
       - run:
           name: Check connection
           command: curl localhost:8000
+          
+  Cleanup: 
+    docker:  
+      - image: cimg/base:2022.06
+    steps:
+      - checkout
+      - run:
+          name: Cleanup
+          command: docker system prune -f
       
 workflows:
   WFlow: 
@@ -70,3 +67,5 @@ workflows:
           requires: [DeployDocker]
       - CheckConnection:
           requires: [Kubes]
+      - Cleanup:
+          requires: [CheckConnection]
