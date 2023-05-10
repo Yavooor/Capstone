@@ -23,7 +23,7 @@ jobs:
     docker:  
       - image: cimg/base:2022.06
         auth:
-          username: "YavorMihalski"
+          username: "yavor.mihalski@tui.com"
           password: "Lolo12345"
     steps:
       - checkout
