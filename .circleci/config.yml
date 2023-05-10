@@ -22,7 +22,6 @@ jobs:
   push-docker:
     docker:  
       - image: circleci/docker@2.1.2
-    executor: docker/docker
     steps:
       - setup_remote_docker
       - checkout
