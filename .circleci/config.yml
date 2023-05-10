@@ -45,6 +45,7 @@ jobs:
       - run:
           name: Create EKS Cluster
           command: |
+            aws sts get-caller-identity && \
             eksctl create cluster --name capstone --region=us-east-1 && \
             eksctl utils describe-stacks --region=us-east-1 --cluster=capstone && \
             eksctl get cluster --name=capstone --region=us-east-1
