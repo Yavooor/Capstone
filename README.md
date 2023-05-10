@@ -2,7 +2,9 @@
 
 Set Up Pipeline
 Create Github repository with project code.
+
 All project code is stored in a GitHub repository and a link to the repository has been provided for reviewers.
+
 ** https://github.com/Yavooor/Capstone **
 
 Use image repository to store Docker images
