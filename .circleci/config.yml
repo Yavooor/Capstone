@@ -21,18 +21,13 @@ jobs:
           
   DeployDocker:
     docker:  
-      - image: cimg/python:3.11.3
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: Build Docker
           command: |
-            sudo service docker status
-            sudo service docker start 
-            echo "ok"
-            sleep 30
-            echo "morning"
-            docker build -t capstone . 
+            docker build --tag=capstone .
       - run:
           name: Tag Docker
           command: docker tag capstone:latest 018538312056.dkr.ecr.us-east-1.amazonaws.com/capstone:latest
