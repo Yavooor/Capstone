@@ -21,7 +21,7 @@ jobs:
           
   DeployDocker:
     docker:  
-      - image: docker:latest
+      - image: cimg/python:3.11.3
     steps:
       - checkout
       - run:
