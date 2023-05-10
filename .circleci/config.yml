@@ -29,12 +29,21 @@ jobs:
       - run:
           name: Build Tag and Push Docker
           command: chmod 755 run_docker.sh && ./run_docker.sh
+          
+  Kubes:
+    docker:  
+      - image: circleci/python@1.5.0
+    steps:
+      - checkout
       - run:
           name: Install Minikube
           command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && sudo install minikube-linux-amd64 /usr/local/bin/minikube
       - run:
           name: start Minikube
           command: minikube start && kubectl get po -A
+      - run:
+          name: get kubes
+          command: kubectl get po -A
       - run: 
           name: DeployDocker
           command: kubectl create deployment hello-minikube --image=kicbase/echo-server:1.0 && kubectl expose deployment hello-minikube --type=NodePort --port=8000
@@ -57,5 +66,7 @@ workflows:
       - build-and-test 
       - DeployDocker:
           requires: [build-and-test]
+      - Kubes:
+          requires: [DeployDocker]
       - CheckConnection:
           requires: [DeployDocker]
