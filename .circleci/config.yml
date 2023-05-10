@@ -37,7 +37,7 @@ jobs:
       - checkout
       - run:
           name: run kubernetes
-          command: ./run_kubernetes.sh
+          command: chmod 755 run_kubernetes.sh && ./run_kubernetes.sh
           
   CheckConnection: 
     docker:  
