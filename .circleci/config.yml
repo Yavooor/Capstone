@@ -46,7 +46,6 @@ jobs:
           name: Create EKS Cluster
           command: |
             eksctl create cluster --name capstone --region=us-east-1 && \
-            eksctl create cluster -f cluster-config.yaml --profile fsnd
             eksctl utils describe-stacks --region=us-east-1 --cluster=capstone && \
             eksctl get cluster --name=capstone --region=us-east-1
           
