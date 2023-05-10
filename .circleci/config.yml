@@ -32,24 +32,6 @@ jobs:
           name: Build Tag and Push Docker
           command: chmod 755 run_docker.sh && ./run_docker.sh
           
-  test-cluster:
-      docker:
-        - image: cimg/python:3.10
-      parameters:
-        cluster-name:
-          description: |
-            capstone
-          type: string
-      steps:
-        - kubernetes/install:
-            kubectl-version: v1.22.0
-        - aws-eks/update-kubeconfig-with-authenticator:
-            cluster-name: capstone
-        - run:
-            command: |
-              kubectl get services
-            name: Test cluster
-          
           
   Kubes:
     docker:  
@@ -67,6 +49,25 @@ jobs:
           name: run kubernetes
           command: chmod 755 run_kubernetes.sh && ./run_kubernetes.sh
           
+          
+  test-cluster:
+      docker:
+        - image: cimg/python:3.10
+      parameters:
+        cluster-name:
+          description: |
+            capstone
+          type: string
+      steps:
+        - kubernetes/install:
+            kubectl-version: v1.22.0
+        - aws-eks/update-kubeconfig-with-authenticator:
+            cluster-name: capstone
+        - run:
+            command: |
+              kubectl get services
+            name: Test cluster
+            
   CheckConnection: 
     docker:  
       - image: circleci/python:3.6.7-stretch
@@ -102,7 +103,7 @@ workflows:
           requires:
             - test-cluster
       - Kubes:
-          requires: [CreateEKSCluster]
+          requires: [DeployDocker]
       - CheckConnection:
           requires: [Kubes]
       - Cleanup:
