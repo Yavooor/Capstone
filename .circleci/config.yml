@@ -30,6 +30,19 @@ jobs:
           name: Build Tag and Push Docker
           command: chmod 755 run_docker.sh && ./run_docker.sh
           
+  CreateEKSCluster:
+    docker:  
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Create EKS Cluster
+          command: |
+          eksctl create cluster --name capstone --region=us-east-1 && \
+          eksctl utils describe-stacks --region=us-east-1 --cluster=capstone && \
+          eksctl get cluster --name=capstone --region=us-east-1
+          
+          
   Kubes:
     docker:  
       - image: cimg/python:3.11.3
@@ -70,8 +83,10 @@ workflows:
       - build-and-test 
       - DeployDocker:
           requires: [build-and-test]
-      - Kubes:
+      - CreateEKSCluster:
           requires: [DeployDocker]
+      - Kubes:
+          requires: [CreateEKSCluster]
       - CheckConnection:
           requires: [Kubes]
       - Cleanup:
