@@ -27,6 +27,7 @@ jobs:
       - run:
           name: Build Docker
           command: |
+            sudo service docker status
             sudo service docker start 
             echo "ok"
             sleep 30
