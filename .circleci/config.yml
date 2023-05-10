@@ -1,8 +1,6 @@
 version: 2.1
 orbs:
   python: circleci/python@1.5.0
-  aws-eks: circleci/aws-eks@1
-  kubernetes: circleci/kubernetes@1.3
 
 jobs:
   build-and-test:
@@ -31,6 +29,26 @@ jobs:
       - run:
           name: Build Tag and Push Docker
           command: chmod 755 run_docker.sh && ./run_docker.sh
+          
+  CreateEKSCluster:
+    docker:  
+      - image: cimg/python:3.11.3
+    steps:
+      - checkout
+      - run: 
+          name: install eksctl
+          command: sudo curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && sudo mv /tmp/eksctl /usr/local/bin
+      - run:
+          name: install awscli
+          command: |
+            pip install awscli
+      - run:
+          name: Create EKS Cluster
+          command: |
+            eksctl create cluster --name capstone --region=us-east-1 && \
+            eksctl create cluster -f cluster-config.yaml --profile fsnd
+            eksctl utils describe-stacks --region=us-east-1 --cluster=capstone && \
+            eksctl get cluster --name=capstone --region=us-east-1
           
           
   Kubes:
